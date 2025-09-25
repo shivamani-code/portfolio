@@ -1,38 +1,44 @@
-// Header background change
-window.addEventListener("scroll", function(){
-  const header = document.querySelector("header");
-  if(window.scrollY > 50){
-    header.style.background = "#001a22";
-  } else {
-    header.style.background = "#003344";
-  }
+// Simple form submission handling
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Thank you for your message! I will get back to you soon.');
+    this.reset();
 });
 
-// Fade-in sections
-const sections = document.querySelectorAll("section");
-window.addEventListener("scroll", () => {
-  sections.forEach(sec => {
-    const rect = sec.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 100) {
-      sec.classList.add("show");
-    }
-  });
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
 });
 
-// Active link highlight
-const navLinks = document.querySelectorAll("nav .menu a");
-window.addEventListener("scroll", () => {
-  let current = "";
-  sections.forEach(sec => {
-    const secTop = sec.offsetTop;
-    if (pageYOffset >= secTop - 60) {
-      current = sec.getAttribute("id");
-    }
-  });
-  navLinks.forEach(link => {
-    link.classList.remove("active");
-    if (link.getAttribute("href") === "#" + current) {
-      link.classList.add("active");
-    }
-  });
+// Mobile menu toggle
+document.querySelector('.hamburger').addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('active');
+});
+
+// Simple animation on scroll
+const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.skill-category, .project-card, .timeline-item, .stat-box').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'all 0.5s ease';
+    observer.observe(el);
 });
